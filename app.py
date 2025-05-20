@@ -61,7 +61,13 @@ def auth():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', username= current_user.username)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth'))
 
 if __name__ == '__main__':
     app.run(debug=True)
