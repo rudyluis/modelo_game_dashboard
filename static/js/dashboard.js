@@ -1,4 +1,4 @@
-const csvUrl = "https://raw.githubusercontent.com/rudyluis/DashboardJS/refs/heads/main/video_games_sales.csv";
+//const csvUrl = "https://raw.githubusercontent.com/rudyluis/DashboardJS/refs/heads/main/video_games_sales.csv";
 let allData = [];
 let filteredData = [];
 
@@ -28,7 +28,7 @@ $(document).ready(function () {
                 $(this).removeData('prevent-open');
             }
         });
-
+/*
     $.ajax({
         url: csvUrl,
         dataType: 'text',
@@ -37,6 +37,19 @@ $(document).ready(function () {
             allData = parsed.data.filter(d => d.Name && d.Global_Sales && !isNaN(parseFloat(d.Global_Sales)));
             filteredData = allData;
             console.log(allData);
+            popularFiltros();
+            actualizarStatsCards();
+            aplicarFiltrosYGraficos();
+        }
+    });
+*/
+    $.ajax({
+        url: "api/video_games",
+        dataType: 'GET',
+        success: function (data) {
+            console.log(data);
+            allData = data;
+            filteredData = allData;
             popularFiltros();
             actualizarStatsCards();
             aplicarFiltrosYGraficos();

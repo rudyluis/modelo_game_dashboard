@@ -69,5 +69,28 @@ def logout():
     logout_user()
     return redirect(url_for('auth'))
 
+#### Creacion y llamada ala BD
+@app.route('/api/video_games')
+def api_video_games():
+    print("API LLEGAMOS")
+    video_games = db_session.query(VideoGameSale).all()
+    ##print(video_games)
+    juegos=[]
+    for juego in video_games:
+        juegos.append({
+            "Name":juego.name,
+            "Platform":juego.platform,
+            "Year":juego.year,
+            "Genre":juego.genre,
+            "Publisher":juego.publisher,
+            "NA_Sales":juego.na_sales,
+            "EU_Sales":juego.eu_sales,
+            "JP_Sales":juego.jp_sales,
+            "Other_Sales":juego.other_sales,
+            "Global_Sales":juego.global_sales
+        })
+    ##print(juegos)
+    return jsonify(juegos)
+
 if __name__ == '__main__':
     app.run(debug=True)
