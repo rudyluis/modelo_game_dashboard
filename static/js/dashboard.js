@@ -70,7 +70,7 @@ $(document).ready(function () {
         renderGraficos(filteredData);
     });
 });
-
+/*
 function popularFiltros() {
     const plataformaSel = $('#filterPlataforma').val() || [];
     const generoSel = $('#filterGenero').val() || [];
@@ -111,7 +111,31 @@ function popularFiltros() {
         (anioSel.length === 0 || anioSel.includes(d.Year))
     ) : allData, 'Publisher'), editorSel);
 }
+*/
+function popularFiltros() {
+    const params = {
+        plataforma: $('#filterPlataforma').val() || [],
+        genero: $('#filterGenero').val() || [],
+        anio: $('#filterAnio').val() || [],
+        editor: $('#filterEditor').val() || []
+    };
 
+    $.ajax({
+        url: '/api/filtros',
+        method: 'GET',
+        data: params,
+        traditional: true,  // importante para enviar listas en query string
+        success: function (res) {
+            actualizarCombo('#filterPlataforma', res.plataformas, params.plataforma);
+            actualizarCombo('#filterGenero', res.generos, params.genero);
+            actualizarCombo('#filterAnio', res.anios, params.anio);
+            actualizarCombo('#filterEditor', res.editores, params.editor);
+        },
+        error: function (err) {
+            console.error("Error al cargar filtros:", err);
+        }
+    });
+}
 function actualizarStatsCards() {
     const totalSales = filteredData.reduce((sum, d) => sum + parseFloat(d.Global_Sales || 0), 0);
     const platformSales = {};

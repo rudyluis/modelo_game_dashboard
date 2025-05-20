@@ -91,6 +91,24 @@ def api_video_games():
         })
     ##print(juegos)
     return jsonify(juegos)
+@app.route('/api/filtros', methods=['GET'])
+def obtener_filtros():
+    plataforma= request.args.getlist('plataforma')
+    genero= request.args.getlist('genero')
+    anio= request.args.getlist('anio')
+    editor= request.args.getlist('editor')
 
+    query = db_session.query(VideoGameSale)
+    if plataforma:
+        query = query.filter(VideoGameSale.platform.in_(plataforma))
+    if genero:
+        query = query.filter(VideoGameSale.genre.in_(genero))
+    if anio:
+        query = query.filter(VideoGameSale.year.in_(anio))
+    if editor:
+        query = query.filter(VideoGameSale.publisher.in_(editor))
+    
+    data = query.all()
+    
 if __name__ == '__main__':
     app.run(debug=True)
