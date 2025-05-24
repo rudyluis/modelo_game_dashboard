@@ -11,7 +11,7 @@ $(document).ready(function () {
             console.error("Error al cargar los datos:", error);
         }
     });
-    //cargarOpcionesFormulario();
+    cargarOpcionesFormulario();
 });
 
 
@@ -64,5 +64,38 @@ function cargarTabla(data) {
             }
         ],
         responsive: true
+    });
+}
+
+
+/// cargar combos de filtros
+function cargarOpcionesFormulario() {
+    $.ajax({
+        url: '/api/opciones',
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            llenarCombo('#editarPlatform', data.plataformas);
+            llenarCombo('#editarGenre', data.generos);
+            llenarCombo('#editarPublisher', data.editores);
+            llenarCombo('#editarYear', data.anios);
+
+            llenarCombo('#addPlatform', data.plataformas);
+            llenarCombo('#addGenre', data.generos);
+            llenarCombo('#addPublisher', data.editores);
+            llenarCombo('#addYear', data.anios);
+        },
+        error: function () {
+            console.error("Error al cargar combos");
+        }
+    });
+}
+
+function llenarCombo(selector, valores) {
+    const select = $(selector);
+    select.empty();
+    select.append('<option value="">-- Seleccione --</option>');
+    valores.forEach(v => {
+        select.append(`<option value="${v}">${v}</option>`);
     });
 }
