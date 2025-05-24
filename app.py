@@ -109,6 +109,18 @@ def obtener_filtros():
         query = query.filter(VideoGameSale.publisher.in_(editor))
     
     data = query.all()
+
+    plataformas= sorted({v.platform for v in data if v.plataform} )
+    generos= sorted({v.genre for v in data if v.genre} )
+    anios= sorted({v.year for v in data if v.year} )
+    editores= sorted({v.publisher for v in data if v.publisher} )
+    return jsonify({
+          'plataformas':plataformas,
+          'generos':generos,
+          'anios':anios,
+          'editores':editores
+        })
+
     
 if __name__ == '__main__':
     app.run(debug=True)

@@ -126,6 +126,7 @@ function popularFiltros() {
         data: params,
         traditional: true,  // importante para enviar listas en query string
         success: function (res) {
+            console.log(res);
             actualizarCombo('#filterPlataforma', res.plataformas, params.plataforma);
             actualizarCombo('#filterGenero', res.generos, params.genero);
             actualizarCombo('#filterAnio', res.anios, params.anio);
