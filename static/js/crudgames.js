@@ -128,7 +128,7 @@ $('#formAgregar').on('submit', function (e) {
             $('#formAgregar')[0].reset();
             $('#tablaJuegos').DataTable().destroy(); // Recarga
             cargarDatos(); // Vuelve a cargar la tabla
-           // alert(response.mensaje);
+           // alert(response.mensaje);  
             mostrarToast('🎮 Videojuego agregado con éxito', 'success');
         },
         error: function () {
