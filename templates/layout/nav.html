@@ -5,6 +5,14 @@
             <input type="text" id="searchTitle" class="form-control me-2" placeholder="Buscar título..."
                 style="max-width: 200px;">
             <button id="toggleTheme" class="btn btn-outline-dark">Modo Oscuro 🌙</button>
+            <a href="{{ url_for('dashboard')}}" class="btn btn-outline-warning btn-sm ms-2">
+                <i class="fa-solid fa-tachograph-digital"></i>
+
+            </a>
+            <a href="{{ url_for('listgames')}}" class="btn btn-outline-success btn-sm ms-2">
+                <i class="fa-solid fa-notes-medical"></i>
+
+            </a>
             <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm ms-2">
                 <i class="fas fa-power-off"></i> <!-- Icono de apagado -->
             </a>
