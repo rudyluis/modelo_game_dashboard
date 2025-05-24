@@ -202,5 +202,30 @@ def eliminar_videojuego(id):
     return jsonify({"error": "Videojuego no encontrado"}), 404
 
 
+@app.route('/upd/video_games/<int:id>', methods=['PUT'])
+def actualizar_videojuego(id):
+    data = request.json
+    juego = db_session.query(VideoGameSale).get(id)
+    if not juego:
+        return jsonify({"error": "No encontrado"}), 404
+
+    juego.rank = int(data.get("rank"))
+    juego.name = data.get("name")
+    juego.platform = data.get("platform")
+    juego.year = int(data.get("year")) if data.get("year") else None
+    juego.genre = data.get("genre")
+    juego.publisher = data.get("publisher")
+    juego.na_sales = float(data.get("na_sales"))
+    juego.eu_sales = float(data.get("eu_sales"))
+    juego.jp_sales = float(data.get("jp_sales"))
+    juego.other_sales = float(data.get("other_sales"))
+    juego.global_sales = float(data.get("global_sales"))
+
+    db_session.commit()
+    return jsonify({"mensaje": "Actualizado correctamente"})
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

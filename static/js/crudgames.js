@@ -190,3 +190,61 @@ $('#tablaJuegos').on('click', '.btn-eliminar', function () {
         });
     }
 });
+
+
+//// editar registro
+$('#tablaJuegos').on('click', '.btn-editar', function () {
+    const row = $(this).closest('tr');
+    const data = $('#tablaJuegos').DataTable().row(row).data();
+    console.log(data);
+    $('#editarId').val(data[0]);
+    $('#editarName').val(data[1]);
+    $('#editarPlatform').val(data[2]);
+    $('#editarYear').val(data[3]);
+    $('#editarGenre').val(data[4]);
+    $('#editarPublisher').val(data[5]);
+    $('#editarNa').val(data[6]);
+    $('#editarEu').val(data[7]);
+    $('#editarJp').val(data[8]);
+    $('#editarOtros').val(data[9]);
+    $('#editarGlobal').val(data[10]);
+
+    const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
+    modal.show();
+});
+
+
+// Guardar Cambios Edicion
+$('#formEditar').on('submit', function (e) {
+    e.preventDefault();
+    const id = $('#editarId').val();
+
+    const datos = {
+        rank: parseInt($('#editarRank').val()),
+        name: $('#editarName').val(),
+        platform: $('#editarPlatform').val(),
+        year: parseInt($('#editarYear').val()),
+        genre: $('#editarGenre').val(),
+        publisher: $('#editarPublisher').val(),
+        na_sales: parseFloat($('#editarNa').val()),
+        eu_sales: parseFloat($('#editarEu').val()),
+        jp_sales: parseFloat($('#editarJp').val()),
+        other_sales: parseFloat($('#editarOtros').val()),
+        global_sales: parseFloat($('#editarGlobal').val())
+    };
+
+    $.ajax({
+        url: `/upd/video_games/${id}`,
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(datos),
+        success: function () {
+            $('#modalEditar').modal('hide');
+            mostrarToast('✏️ Registro actualizado', 'warning');
+            cargarDatos();
+        },
+        error: function () {
+            alert('Error al actualizar');
+        }
+    });
+});
