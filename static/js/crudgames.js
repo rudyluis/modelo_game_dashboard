@@ -170,3 +170,23 @@ function mostrarToast(mensaje, tipo = 'primary') {
     const toast = new bootstrap.Toast(toastEl[0]);
     toast.show();
 }
+
+
+//// eliminar registro
+$('#tablaJuegos').on('click', '.btn-eliminar', function () {
+    const id = $(this).data('id');
+    if (confirm("¿Estás seguro de eliminar este registro?")) {
+        $.ajax({
+            url: `/del/video_games/${id}`,
+            method: 'DELETE',
+            success: function () {
+                mostrarToast('❌ Registro eliminado', 'danger');
+                
+                cargarDatos(); // vuelve a cargar la tabla
+            },
+            error: function () {
+                alert("Error al eliminar");
+            }
+        });
+    }
+});

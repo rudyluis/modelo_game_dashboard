@@ -192,5 +192,15 @@ def crear_videojuego():
     db_session.commit()
     return jsonify({"mensaje": "Videojuego agregado correctamente"})
 
+@app.route('/del/video_games/<int:id>', methods=['DELETE'])
+def eliminar_videojuego(id):
+    videojuego = db_session.query(VideoGameSale).get(id)
+    if videojuego:
+        db_session.delete(videojuego)
+        db_session.commit()
+        return jsonify({"mensaje": "Eliminado correctamente"})
+    return jsonify({"error": "Videojuego no encontrado"}), 404
+
+
 if __name__ == '__main__':
     app.run(debug=True)
