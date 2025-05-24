@@ -171,7 +171,26 @@ def obtener_opciones():
         "anios": sorted([a[0] for a in anios if a[0]])
     })
 
-
+#### Agregar Videojuego
+@app.route('/add/video_games', methods=['POST'])
+def crear_videojuego():
+    data = request.json
+    nuevo = VideoGameSale(
+        rank=int(data.get('rank')),
+        name=data.get('name'),
+        platform=data.get('platform'),
+        year=int(data.get('year')) if data.get('year') else None,
+        genre=data.get('genre'),
+        publisher=data.get('publisher'),
+        na_sales=float(data.get('na_sales')),
+        eu_sales=float(data.get('eu_sales')),
+        jp_sales=float(data.get('jp_sales')),
+        other_sales=float(data.get('other_sales')),
+        global_sales=float(data.get('global_sales'))
+    )
+    db_session.add(nuevo)
+    db_session.commit()
+    return jsonify({"mensaje": "Videojuego agregado correctamente"})
 
 if __name__ == '__main__':
     app.run(debug=True)

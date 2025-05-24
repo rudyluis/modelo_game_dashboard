@@ -99,3 +99,40 @@ function llenarCombo(selector, valores) {
         select.append(`<option value="${v}">${v}</option>`);
     });
 }
+
+//Agregar Registro
+$('#formAgregar').on('submit', function (e) {
+    e.preventDefault();
+
+    const datos = {
+        rank: parseInt(this.rank.value),
+        name: this.name.value,
+        platform: this.platform.value,
+        year: parseInt(this.year.value),
+        genre: this.genre.value,
+        publisher: this.publisher.value,
+        na_sales: parseFloat(this.na_sales.value),
+        eu_sales: parseFloat(this.eu_sales.value),
+        jp_sales: parseFloat(this.jp_sales.value),
+        other_sales: parseFloat(this.other_sales.value),
+        global_sales: parseFloat(this.global_sales.value)
+    };
+
+    $.ajax({
+        url: '/add/video_games',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(datos),
+        success: function (response) {
+            $('#modalAgregar').modal('hide');
+            $('#formAgregar')[0].reset();
+            $('#tablaJuegos').DataTable().destroy(); // Recarga
+            cargarDatos(); // Vuelve a cargar la tabla
+            alert(response.mensaje);
+            //mostrarToast('🎮 Videojuego agregado con éxito', 'success');
+        },
+        error: function () {
+            alert('Error al guardar el videojuego.');
+        }
+    });
+});
