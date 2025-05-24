@@ -28,8 +28,8 @@ $(document).ready(function () {
                 $(this).removeData('prevent-open');
             }
         });
-/*
-    $.ajax({
+
+    /*$.ajax({
         url: csvUrl,
         dataType: 'text',
         success: function (data) {
@@ -41,22 +41,29 @@ $(document).ready(function () {
             actualizarStatsCards();
             aplicarFiltrosYGraficos();
         }
-    });
-*/
+    });*/
     $.ajax({
-        url: "api/video_games",
-        dataType: 'GET',
+        url: "/api/video_games",
+        method: "GET",
+        dataType: "json",
         success: function (data) {
-            console.log(data);
+            console.log("Datos recibidos:", data);
+           
             allData = data;
             filteredData = allData;
+            console.log(allData);
             popularFiltros();
             actualizarStatsCards();
             aplicarFiltrosYGraficos();
+
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar los datos:", error);
         }
     });
 
     $('#filterPlataforma, #filterGenero, #filterAnio, #filterEditor').on('change', function () {
+        //popularFiltros()
         aplicarFiltrosYGraficos();
     });
 
@@ -111,6 +118,7 @@ function popularFiltros() {
         (anioSel.length === 0 || anioSel.includes(d.Year))
     ) : allData, 'Publisher'), editorSel);
 }
+
 */
 function popularFiltros() {
     const params = {
@@ -126,7 +134,6 @@ function popularFiltros() {
         data: params,
         traditional: true,  // importante para enviar listas en query string
         success: function (res) {
-            console.log(res);
             actualizarCombo('#filterPlataforma', res.plataformas, params.plataforma);
             actualizarCombo('#filterGenero', res.generos, params.genero);
             actualizarCombo('#filterAnio', res.anios, params.anio);
@@ -137,6 +144,17 @@ function popularFiltros() {
         }
     });
 }
+
+function actualizarCombo(id, valores, valoresActuales) {
+    const select = $(id);
+    select.empty();
+    valores.forEach(v => select.append(`<option value="${v}">${v}</option>`));
+    select.val(valoresActuales);
+    select.trigger('change.select2'); // si usas select2
+}
+
+
+
 function actualizarStatsCards() {
     const totalSales = filteredData.reduce((sum, d) => sum + parseFloat(d.Global_Sales || 0), 0);
     const platformSales = {};
@@ -176,6 +194,7 @@ function aplicarFiltrosYGraficos() {
         (!search || d.Name.toLowerCase().includes(search))
     );
 
+    
     cargarTabla(filteredData);
     actualizarStatsCards();
     renderGraficos(filteredData);
