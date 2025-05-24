@@ -126,6 +126,52 @@ def obtener_filtros():
         'editores': editores
     })
 
+@app.route('/listgames')
+@login_required
+def listgames():
+    return render_template('crud/list.html')
+
+###### CRUD
+
+@app.route('/api/list_video_games')
+def api_list_video_games():
+    data = db_session.query(VideoGameSale).all()
     
+    juegos = []
+    for juego in data:
+        
+        juegos.append({
+            "id": juego.id,
+            "Name": juego.name,
+            "Platform": juego.platform,
+            "Year": juego.year,
+            "Genre": juego.genre,
+            "Publisher": juego.publisher,
+            "NA_Sales": juego.na_sales,
+            "EU_Sales": juego.eu_sales,
+            "JP_Sales": juego.jp_sales,
+            "Other_Sales": juego.other_sales,
+            "Global_Sales": juego.global_sales
+        })
+
+    return jsonify(juegos)
+
+##para los combos de filtros
+@app.route('/api/opciones', methods=['GET'])
+def obtener_opciones():
+    plataformas = db_session.query(VideoGameSale.platform).distinct().all()
+    generos = db_session.query(VideoGameSale.genre).distinct().all()
+    editores = db_session.query(VideoGameSale.publisher).distinct().all()
+    anios = db_session.query(VideoGameSale.year).distinct().all()
+
+    return jsonify({
+        "plataformas": sorted([p[0] for p in plataformas if p[0]]),
+        "generos": sorted([g[0] for g in generos if g[0]]),
+        "editores": sorted([e[0] for e in editores if e[0]]),
+        "anios": sorted([a[0] for a in anios if a[0]])
+    })
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
