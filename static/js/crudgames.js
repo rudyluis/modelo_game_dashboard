@@ -128,11 +128,45 @@ $('#formAgregar').on('submit', function (e) {
             $('#formAgregar')[0].reset();
             $('#tablaJuegos').DataTable().destroy(); // Recarga
             cargarDatos(); // Vuelve a cargar la tabla
-            alert(response.mensaje);
-            //mostrarToast('🎮 Videojuego agregado con éxito', 'success');
+           // alert(response.mensaje);
+            mostrarToast('🎮 Videojuego agregado con éxito', 'success');
         },
         error: function () {
             alert('Error al guardar el videojuego.');
         }
     });
 });
+
+
+function cargarDatos() {
+    $('#loader').removeClass('d-none');
+    $.ajax({
+        url: "/api/list_video_games",
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            $('#tablaJuegos').DataTable().clear().destroy();
+            cargarTabla(data);
+        },
+        error: function () {
+            alert("Error al cargar datos");
+        },
+        complete: function () {
+            $('#loader').addClass('d-none');
+        }
+    });
+}
+
+
+// mostrar mensajes
+function mostrarToast(mensaje, tipo = 'primary') {
+    const toastEl = $('#toastNotificacion');
+    const toastBody = $('#toastMensaje');
+
+    toastEl.removeClass('bg-primary bg-success bg-danger bg-warning');
+    toastEl.addClass(`bg-${tipo}`);
+    toastBody.text(mensaje);
+
+    const toast = new bootstrap.Toast(toastEl[0]);
+    toast.show();
+}
